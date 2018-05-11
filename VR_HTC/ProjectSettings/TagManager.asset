@@ -6,6 +6,10 @@ TagManager:
   tags:
   - icc_moon_collider
   - icc_earth_collider
+  - Lunohod_Film_Collider
+  - icc_mars_collider
+  - pult
+  - Lunohod_Screen
   layers:
   - Default
   - TransparentFX

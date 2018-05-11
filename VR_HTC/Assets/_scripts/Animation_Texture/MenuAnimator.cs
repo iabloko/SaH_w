@@ -8,7 +8,7 @@ namespace Sirius
     {
         [SerializeField] private int m_FrameRate = 29;                  
         [SerializeField] private MeshRenderer m_ScreenMesh;             
-        [SerializeField] private VRInteractiveItem m_VRInteractiveItem; 
+        [SerializeField] private Settings m_Settings; 
         [SerializeField] private Texture[] m_AnimTextures;              
         [SerializeField] private Texture[] e_AnimTextures;
 
@@ -38,15 +38,15 @@ namespace Sirius
 
         private void OnEnable ()
         {
-            m_VRInteractiveItem.OnOver += HandleOver;
-            m_VRInteractiveItem.OnOut += HandleOut;
+            m_Settings.OnOver += HandleOver;
+            m_Settings.OnOut += HandleOut;
         }
 
 
         private void OnDisable ()
         {
-            m_VRInteractiveItem.OnOver -= HandleOver;
-            m_VRInteractiveItem.OnOut -= HandleOut;
+            m_Settings.OnOver -= HandleOver;
+            m_Settings.OnOut -= HandleOut;
         }
 
 
@@ -80,7 +80,6 @@ namespace Sirius
 
                 yield return m_FrameRateWait;
             }
-
         }
     }
 }

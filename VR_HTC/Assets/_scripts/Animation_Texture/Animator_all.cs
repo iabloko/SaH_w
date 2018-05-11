@@ -1,31 +1,38 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Sirius
 {
-
     public class Animator_all : MonoBehaviour
     {
-        [SerializeField] private int m_FrameRate = 29;
-        [SerializeField] private VRInteractiveItem m_VRInteractiveItem;
-        [Header("                            ICC_MOON")]
-        [SerializeField] private MeshRenderer ICC_MOON;
-        [SerializeField] private Texture[] m_AnimTextures_iccMoon;
-        [Header("                            ICC_EARTH")]
-        [SerializeField] private MeshRenderer ICC_EARTH;
-        [SerializeField] private Texture[] m_AnimTextures_iccEarth;
-        [Header("                            ICC_MARS")]
-        [SerializeField] private MeshRenderer ICC_MARS;
-        [SerializeField] private Texture[] m_AnimTextures_iccMars;
-        [Header("                            Lunohod")]
-        [SerializeField] private MeshRenderer Lunohod_Screen;
-        [SerializeField] private Texture[] m_AnimTextures_LunohodScreen;
-        [Header("                            Lunohod_film")]
-        [SerializeField] private MeshRenderer Lunohod_Film;
-        [SerializeField] private Texture[] m_AnimTextures_LunohodFilm;
+        [System.Serializable]
+        public struct _AllTextures
+        {
+            public Texture[] m_AnimTextures_iccMoon;
+            public Texture[] m_AnimTextures_iccEarth;
+            public Texture[] m_AnimTextures_iccMars;
+            public Texture[] m_AnimTextures_LunohodScreen;
+            public Texture[] m_AnimTextures_LunohodFilm;
 
+        }
+
+        [SerializeField] private int m_FrameRate = 29;
+        [SerializeField] private Settings m_Settings;
+        [SerializeField] private List<MeshRenderer> _MeshRender;
+
+        [SerializeField] private _AllTextures _allTexture;
+
+        //[Header("ICC_MOON texture")]
         //[SerializeField] private Texture[] e_AnimTextures;
 
+        private void Awake()
+        {
+            m_FrameRateWait = new WaitForSeconds(1f / m_FrameRate);
+
+        }
+
+        #region Bool
         private WaitForSeconds m_FrameRateWait;
         private int m_CurrentTextureIndex;
         private bool m_Playing_moon;
@@ -33,45 +40,54 @@ namespace Sirius
         private bool m_Playing_mars;
         private bool m_Lunohod_Screen;
         private bool m_Lunohod_Film;
-        private int e_CurrentTextureIndex;
+        //private int e_CurrentTextureIndex;
+        #endregion
 
-        void Start()
-        {
-            // StartCoroutine("PlayTextures");
-            //PLAY();
-        }
-
+        #region Start_Metod
         public void PLAY()
         {
-            m_Playing_moon = true;
-            m_Playing_earth = true;
-            m_Playing_mars = true;
             m_Lunohod_Screen = true;
             m_Lunohod_Film = true;
-
+        }
+        public void Moon()
+        {
+            m_Playing_moon = true;
             StartCoroutine("iccMoon");
+        }
+        public void Earth()
+        {
+            m_Playing_earth = true;
             StartCoroutine("iccEARTH");
+        }
+        public void Mars()
+        {
+            m_Playing_mars = true;
             StartCoroutine("iccMARS");
         }
-
-        private void Awake()
+        public void Lunohod_Screen()
         {
-            m_FrameRateWait = new WaitForSeconds(1f / m_FrameRate);
+            m_Lunohod_Screen = true;
+            StartCoroutine("LunohodScreen");
         }
-
+        public void Lunohod_Film()
+        {
+            m_Lunohod_Film = true;
+            StartCoroutine("LunohodFilm");
+        }
+        #endregion
 
         #region OnEnable/OnDisable
         private void OnEnable()
         {
-            m_VRInteractiveItem.OnOver += HandleOver;
-            m_VRInteractiveItem.OnOut += HandleOut;
+            m_Settings.OnOver += HandleOver;
+            m_Settings.OnOut += HandleOut;
         }
 
 
         private void OnDisable()
         {
-            m_VRInteractiveItem.OnOver -= HandleOver;
-            m_VRInteractiveItem.OnOut -= HandleOut;
+            m_Settings.OnOver -= HandleOver;
+            m_Settings.OnOut -= HandleOut;
         }
         #endregion
 
@@ -94,19 +110,18 @@ namespace Sirius
         }
 #endregion
 
-        #region IccMoon
+        #region iccMoon
         private IEnumerator iccMoon()
         {
-            Debug.Log("Mooon");
             while (m_Playing_moon)
             {
-                ICC_MOON.material.mainTexture = m_AnimTextures_iccMoon[m_CurrentTextureIndex];
-                //m_ScreenMesh.material.SetTexture("_EmissionMap", e_AnimTextures[e_CurrentTextureIndex]);
+                //Moon Mesh render
+                _MeshRender[0].material.mainTexture = _allTexture.m_AnimTextures_iccMoon[m_CurrentTextureIndex];
+                _MeshRender[0].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_iccMoon[m_CurrentTextureIndex]);
 
-                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % m_AnimTextures_iccMoon.Length;
-                //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
+                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_iccMoon.Length;
 
-                if (ICC_MOON.material.mainTexture == m_AnimTextures_iccMoon[m_AnimTextures_iccMoon.Length - 1])
+                if (_MeshRender[0].material.mainTexture == _allTexture.m_AnimTextures_iccMoon[_allTexture.m_AnimTextures_iccMoon.Length - 1])
                 {
                     m_Playing_moon = false;
                 }
@@ -121,13 +136,13 @@ namespace Sirius
         {
             while (m_Playing_earth)
             {
-                ICC_EARTH.material.mainTexture = m_AnimTextures_iccEarth[m_CurrentTextureIndex];
-                //m_ScreenMesh.material.SetTexture("_EmissionMap", e_AnimTextures[e_CurrentTextureIndex]);
+                //Earth mesh render
+                _MeshRender[1].material.mainTexture = _allTexture.m_AnimTextures_iccEarth[m_CurrentTextureIndex];
+                _MeshRender[1].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_iccEarth[m_CurrentTextureIndex]);
 
-                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % m_AnimTextures_iccEarth.Length;
-                //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
+                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_iccEarth.Length;
 
-                if (ICC_EARTH.material.mainTexture == m_AnimTextures_iccEarth[m_AnimTextures_iccEarth.Length - 1])
+                if (_MeshRender[1].material.mainTexture == _allTexture.m_AnimTextures_iccEarth[_allTexture.m_AnimTextures_iccEarth.Length - 1])
                 {
                     m_Playing_earth = false;
                 }
@@ -142,13 +157,14 @@ namespace Sirius
         {
             while (m_Playing_mars)
             {
-                ICC_MARS.material.mainTexture = m_AnimTextures_iccMars[m_CurrentTextureIndex];
-                //m_ScreenMesh.material.SetTexture("_EmissionMap", e_AnimTextures[e_CurrentTextureIndex]);
+                //Mesh render Mars
+                _MeshRender[2].material.mainTexture = _allTexture.m_AnimTextures_iccMars[m_CurrentTextureIndex];
+                _MeshRender[2].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_iccMars[m_CurrentTextureIndex]);
 
-                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % m_AnimTextures_iccMars.Length;
+                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_iccMars.Length;
                 //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
 
-                if (ICC_MARS.material.mainTexture == m_AnimTextures_iccMars[m_AnimTextures_iccMars.Length - 1])
+                if (_MeshRender[2].material.mainTexture == _allTexture.m_AnimTextures_iccMars[_allTexture.m_AnimTextures_iccMars.Length - 1])
                 {
                     m_Playing_mars = false;
                 }
@@ -163,15 +179,16 @@ namespace Sirius
         {
             while (m_Lunohod_Screen)
             {
-                Lunohod_Screen.material.mainTexture = m_AnimTextures_LunohodScreen[m_CurrentTextureIndex];
-                //m_ScreenMesh.material.SetTexture("_EmissionMap", e_AnimTextures[e_CurrentTextureIndex]);
+                //Lunohod Mesh render
+                _MeshRender[3].material.mainTexture = _allTexture.m_AnimTextures_LunohodScreen[m_CurrentTextureIndex];
+                _MeshRender[3].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_LunohodScreen[m_CurrentTextureIndex]);
 
-                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % m_AnimTextures_LunohodScreen.Length;
+                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_LunohodScreen.Length;
                 //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
 
-                if (Lunohod_Screen.material.mainTexture == m_AnimTextures_LunohodScreen[m_AnimTextures_LunohodScreen.Length - 1])
+                if (_MeshRender[3].material.mainTexture == _allTexture.m_AnimTextures_LunohodScreen[_allTexture.m_AnimTextures_LunohodScreen.Length - 1])
                 {
-                    m_Playing_mars = false;
+                    m_Lunohod_Screen = false;
                 }
 
                 yield return m_FrameRateWait;
@@ -184,15 +201,16 @@ namespace Sirius
         {
             while (m_Lunohod_Film)
             {
-                Lunohod_Film.material.mainTexture = m_AnimTextures_LunohodFilm[m_CurrentTextureIndex];
-                //m_ScreenMesh.material.SetTexture("_EmissionMap", e_AnimTextures[e_CurrentTextureIndex]);
+                //Lunohod Film Mesh render
+                _MeshRender[4].material.mainTexture = _allTexture.m_AnimTextures_LunohodFilm[m_CurrentTextureIndex];
+                _MeshRender[4].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_LunohodFilm[m_CurrentTextureIndex]);
 
-                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % m_AnimTextures_LunohodFilm.Length;
+                m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_LunohodFilm.Length;
                 //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
 
-                if (Lunohod_Film.material.mainTexture == m_AnimTextures_LunohodFilm[m_AnimTextures_LunohodFilm.Length - 1])
+                if (_MeshRender[4].material.mainTexture == _allTexture.m_AnimTextures_LunohodFilm[_allTexture.m_AnimTextures_LunohodFilm.Length - 1])
                 {
-                    m_Playing_mars = false;
+                    m_Lunohod_Film = false;
                 }
 
                 yield return m_FrameRateWait;
@@ -200,14 +218,9 @@ namespace Sirius
         }
         #endregion
 
-        public void JustTest()
+        public void Test()
         {
-            Debug.Log("Just_Test");
-        }
-
-        public void JustTest2()
-        {
-            Debug.Log("Just_Test_2");
+            Debug.Log("Test");
         }
     }
 }

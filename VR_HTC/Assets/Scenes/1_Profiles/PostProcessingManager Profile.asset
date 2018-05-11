@@ -335,13 +335,13 @@ MonoBehaviour:
     value: 1
   preset:
     overrideState: 1
-    value: 6
+    value: 5
   maximumIterationCount:
     overrideState: 1
     value: 16
   resolution:
     overrideState: 1
-    value: 0
+    value: 1
   thickness:
     overrideState: 1
     value: 8
@@ -350,10 +350,10 @@ MonoBehaviour:
     value: 130
   distanceFade:
     overrideState: 1
-    value: 0.5
+    value: 0.197
   vignette:
     overrideState: 1
-    value: 1
+    value: 0.312
 --- !u!114 &114967327346820112
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Sirius
 {
-    public class VRInteractiveItem : MonoBehaviour
+    public class Settings : MonoBehaviour
     {
         public event Action OnOver;             
         public event Action OnOut;              
