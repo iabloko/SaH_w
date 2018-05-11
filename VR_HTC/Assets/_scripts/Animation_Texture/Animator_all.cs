@@ -14,23 +14,13 @@ namespace Sirius
             public Texture[] m_AnimTextures_iccMars;
             public Texture[] m_AnimTextures_LunohodScreen;
             public Texture[] m_AnimTextures_LunohodFilm;
-
         }
 
         [SerializeField] private int m_FrameRate = 29;
         [SerializeField] private Settings m_Settings;
+        [Header("Mesh_and_texture")]
         [SerializeField] private List<MeshRenderer> _MeshRender;
-
         [SerializeField] private _AllTextures _allTexture;
-
-        //[Header("ICC_MOON texture")]
-        //[SerializeField] private Texture[] e_AnimTextures;
-
-        private void Awake()
-        {
-            m_FrameRateWait = new WaitForSeconds(1f / m_FrameRate);
-
-        }
 
         #region Bool
         private WaitForSeconds m_FrameRateWait;
@@ -44,6 +34,11 @@ namespace Sirius
         #endregion
 
         #region Start_Metod
+        private void Awake()
+        {
+            m_FrameRateWait = new WaitForSeconds(1f / m_FrameRate);
+
+        }
         public void PLAY()
         {
             m_Lunohod_Screen = true;
@@ -91,7 +86,7 @@ namespace Sirius
         }
         #endregion
 
-        #region HandleOver/handleOut
+        #region HandleOver/HandleOut
         public void HandleOver()
         {
             m_Playing_moon = true;
@@ -101,14 +96,13 @@ namespace Sirius
             StartCoroutine(iccMoon());
         }
 
-
         private void HandleOut()
         {
             m_Playing_moon = false;
             m_Playing_earth = false;
             m_Playing_mars = false;
         }
-#endregion
+        #endregion
 
         #region iccMoon
         private IEnumerator iccMoon()
@@ -125,7 +119,6 @@ namespace Sirius
                 {
                     m_Playing_moon = false;
                 }
-
                 yield return m_FrameRateWait;
             }
         }
@@ -146,7 +139,6 @@ namespace Sirius
                 {
                     m_Playing_earth = false;
                 }
-
                 yield return m_FrameRateWait;
             }
         }
@@ -162,13 +154,11 @@ namespace Sirius
                 _MeshRender[2].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_iccMars[m_CurrentTextureIndex]);
 
                 m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_iccMars.Length;
-                //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
 
                 if (_MeshRender[2].material.mainTexture == _allTexture.m_AnimTextures_iccMars[_allTexture.m_AnimTextures_iccMars.Length - 1])
                 {
                     m_Playing_mars = false;
                 }
-
                 yield return m_FrameRateWait;
             }
         }
@@ -184,13 +174,11 @@ namespace Sirius
                 _MeshRender[3].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_LunohodScreen[m_CurrentTextureIndex]);
 
                 m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_LunohodScreen.Length;
-                //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
 
                 if (_MeshRender[3].material.mainTexture == _allTexture.m_AnimTextures_LunohodScreen[_allTexture.m_AnimTextures_LunohodScreen.Length - 1])
                 {
                     m_Lunohod_Screen = false;
                 }
-
                 yield return m_FrameRateWait;
             }
         }
@@ -206,21 +194,14 @@ namespace Sirius
                 _MeshRender[4].material.SetTexture("_EmissionMap", _allTexture.m_AnimTextures_LunohodFilm[m_CurrentTextureIndex]);
 
                 m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % _allTexture.m_AnimTextures_LunohodFilm.Length;
-                //e_CurrentTextureIndex = (e_CurrentTextureIndex + 1) % e_AnimTextures.Length;
 
                 if (_MeshRender[4].material.mainTexture == _allTexture.m_AnimTextures_LunohodFilm[_allTexture.m_AnimTextures_LunohodFilm.Length - 1])
                 {
                     m_Lunohod_Film = false;
                 }
-
                 yield return m_FrameRateWait;
             }
         }
         #endregion
-
-        public void Test()
-        {
-            Debug.Log("Test");
-        }
     }
 }
