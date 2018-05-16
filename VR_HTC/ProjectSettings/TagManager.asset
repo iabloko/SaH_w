@@ -10,6 +10,7 @@ TagManager:
   - icc_mars_collider
   - pult
   - Lunohod_Screen
+  - Capsula_Collider
   layers:
   - Default
   - TransparentFX
@@ -19,8 +20,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Global
+  - IgnoreLight
   - 
   - 
   - 

@@ -1,46 +1,76 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Sirius
 { 
     public class ForTriggers : MonoBehaviour
     {
         public Animator_all _Animation;
+        
+        [HideInInspector] public bool ClickProtection = true;
 
         void OnTriggerStay(Collider other)
         {
-            if (other.tag == "icc_moon_collider" && Input.GetKeyDown(KeyCode.Space))
+            if (other.tag == "icc_moon_collider" && Input.GetKey(KeyCode.Space))
             {
                 //Moon
-                _Animation.Moon();
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Animation._i = 0;
+                    _Animation.Public_Start_Animation();
+                }
             }
-            else if (other.tag == "icc_earth_collider" && Input.GetKeyDown(KeyCode.Space))
+            else if (other.tag == "icc_earth_collider" && Input.GetKey(KeyCode.Space))
             {
                 //Earth
-                _Animation.Earth();
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Animation._i = 1;
+                    _Animation.Public_Start_Animation();
+                }
             }
-            else if (other.tag == "icc_mars_collider" && Input.GetKeyDown(KeyCode.Space))
+            else if (other.tag == "icc_mars_collider" && Input.GetKey(KeyCode.Space))
             {
                 //Mars
-                _Animation.Mars();
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Animation._i = 2;
+                    _Animation.Public_Start_Animation();
+                }
             }
-
-            else if (other.tag == "Lunohod_Film_Collider" && Input.GetKeyDown(KeyCode.Space))
-            {
-                //Lunohod_Film
-                _Animation.Lunohod_Film();
-            }
-            else if (other.tag == "Lunohod_Screen" && Input.GetKeyDown(KeyCode.Space))
+            else if (other.tag == "Lunohod_Screen" && Input.GetKey(KeyCode.Space))
             {
                 //Lunohod_Screen
-                _Animation.Lunohod_Screen();
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Animation._i = 3;
+                    _Animation.Public_Start_Animation();
+                }
             }
-        }
 
-        private void OnTriggerExit(Collider other)
-        {
-            
+            else if (other.tag == "Lunohod_Film_Collider" && Input.GetKey(KeyCode.Space))
+            {
+                //Lunohod_Film
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Animation._i = 4;
+                    _Animation.Public_Start_Animation();
+                }
+            }
+            else if (other.tag == "Capsula_Collider" && Input.GetKey(KeyCode.Space))
+            {
+                //Capsula_Collider
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Animation._i = 5;
+                    _Animation.Public_Start_Animation();
+                }
+            }
         }
     }
 }
