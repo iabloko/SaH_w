@@ -4,7 +4,8 @@ namespace Sirius
 { 
     public class ForTriggers : MonoBehaviour
     {
-        public Animator_all _Animation;
+        [SerializeField] private Animator_all _Animation;
+        [SerializeField] private All_PS _Allps;
         
         [HideInInspector] public bool ClickProtection = true;
 
@@ -17,7 +18,7 @@ namespace Sirius
                 {
                     ClickProtection = false;
                     _Animation._i = 0;
-                    _Animation.Public_Start_Animation();
+                    _Animation.One_Pic();
                 }
             }
             else if (other.tag == "icc_earth_collider" && Input.GetKey(KeyCode.Space))
@@ -27,7 +28,7 @@ namespace Sirius
                 {
                     ClickProtection = false;
                     _Animation._i = 1;
-                    _Animation.Public_Start_Animation();
+                    _Animation.One_Pic();
                 }
             }
             else if (other.tag == "icc_mars_collider" && Input.GetKey(KeyCode.Space))
@@ -37,7 +38,7 @@ namespace Sirius
                 {
                     ClickProtection = false;
                     _Animation._i = 2;
-                    _Animation.Public_Start_Animation();
+                    _Animation.One_Pic();
                 }
             }
             else if (other.tag == "Lunohod_Screen" && Input.GetKey(KeyCode.Space))
@@ -47,7 +48,7 @@ namespace Sirius
                 {
                     ClickProtection = false;
                     _Animation._i = 3;
-                    _Animation.Public_Start_Animation();
+                    _Animation.One_Pic();
                 }
             }
 
@@ -58,7 +59,7 @@ namespace Sirius
                 {
                     ClickProtection = false;
                     _Animation._i = 4;
-                    _Animation.Public_Start_Animation();
+                    _Animation.Film_Pick();
                 }
             }
             else if (other.tag == "Capsula_Collider" && Input.GetKey(KeyCode.Space))
@@ -68,7 +69,28 @@ namespace Sirius
                 {
                     ClickProtection = false;
                     _Animation._i = 5;
-                    _Animation.Public_Start_Animation();
+                    _Animation.One_Pic();
+                }
+            }
+            else if (other.tag == "pult" && Input.GetKey(KeyCode.Space))
+            {
+                //Pult
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Allps.PS_i = 0;
+                    _Allps.Particles();
+
+                }
+            }
+            else if (other.tag == "SolarSystemCollider" && Input.GetKey(KeyCode.Space))
+            {
+                //SolarSystem
+                if (ClickProtection)
+                {
+                    ClickProtection = false;
+                    _Allps.PS_i = 1;
+                    _Allps.Particles();
                 }
             }
         }
