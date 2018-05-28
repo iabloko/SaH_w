@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Noise_amount: 0.214
+    - _Noise_amount: 0.178
     - _Speed_X: 0.05
     - _Speed_X_2: 0.1
     - _Speed_Y: 0.2

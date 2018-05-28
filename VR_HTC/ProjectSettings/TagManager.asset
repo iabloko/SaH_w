@@ -4,14 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - icc_moon_collider
-  - icc_earth_collider
+  - ExcludeTeleport
   - Lunohod_Film_Collider
-  - icc_mars_collider
-  - pult
-  - Lunohod_Screen
-  - Capsula_Collider
   - SolarSystemCollider
+  - icc_mars_collider
+  - Lunohod_Screen
+  - pult
+  - Capsula_Collider
+  - FxTemporaire
+  - projectile
+  - TeleportIgnore
   layers:
   - Default
   - TransparentFX
@@ -21,9 +23,9 @@ TagManager:
   - UI
   - 
   - 
-  - Global
   - IgnoreLight
-  - MoonShadows
+  - Global
+  - 
   - 
   - 
   - 
