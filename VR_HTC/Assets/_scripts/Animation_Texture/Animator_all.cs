@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Sirius
+namespace VRTK.Controllables.ArtificialBased
 {
     public class Animator_all : MonoBehaviour
     {
@@ -14,10 +14,10 @@ namespace Sirius
         [HideInInspector] public int _i = 0;
         [SerializeField] private int m_FrameRate_One = 1;
         [SerializeField] private int m_FrameRate_Film = 30;
-        [SerializeField] private float _delay = 1;
+        [SerializeField] private float _delay;
 
         [SerializeField] private Settings m_Settings;
-        [SerializeField] private ForTriggers s_ForTriggers;
+        [SerializeField] private VRTK_ArtificialPusher _VRTK_ArtificialPusher;
         [Header("Mesh_and_texture")]
         [SerializeField] private List<MeshRenderer> _MeshRender;
 
@@ -85,8 +85,6 @@ namespace Sirius
             _MeshRender[_i].material.SetTexture("_EmissionMap", Textures[_i].m_AnimTextures[m_CurrentTextureIndex]);
 
             m_CurrentTextureIndex = (m_CurrentTextureIndex + 1) % Textures[_i].m_AnimTextures.Length;
-            yield return Delay;
-            s_ForTriggers.ClickProtection = true;
 
             yield return m_FrameRateWait;
         }
@@ -106,11 +104,11 @@ namespace Sirius
                 if (_MeshRender[_i].material.mainTexture == Textures[_i].m_AnimTextures[Textures[_i].m_AnimTextures.Length - 1])
                 {
                     m_FilmPick = false;
-                    s_ForTriggers.ClickProtection = true;
                 }
                 yield return m_FasterFrameRateWait;
             }
         }
         #endregion
+
     }
 }

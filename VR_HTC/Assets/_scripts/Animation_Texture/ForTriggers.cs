@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Sirius
+namespace VRTK.Controllables.ArtificialBased
 { 
     public class ForTriggers : MonoBehaviour
     {

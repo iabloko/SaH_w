@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace Sirius
+namespace VRTK.Controllables.ArtificialBased
 {
     public class Settings : MonoBehaviour
     {

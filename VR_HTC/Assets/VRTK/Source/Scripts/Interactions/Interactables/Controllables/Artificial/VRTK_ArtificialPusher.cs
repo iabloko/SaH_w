@@ -1,19 +1,7 @@
-﻿// Artificial Pusher|ArtificialControllables|120010
-namespace VRTK.Controllables.ArtificialBased
+﻿namespace VRTK.Controllables.ArtificialBased
 {
     using UnityEngine;
     using System.Collections;
-
-    /// <summary>
-    /// An artificially simulated pushable pusher.
-    /// </summary>
-    /// <remarks>
-    /// **Required Components:**
-    ///  * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects. Will be automatically added at runtime.
-    ///
-    /// **Script Usage:**
-    ///  * Place the `VRTK_ArtificialPusher` script onto the GameObject that is to become the pusher.
-    /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactables/Controllables/Artificial/VRTK_ArtificialPusher")]
     public class VRTK_ArtificialPusher : VRTK_BaseControllable
     {
@@ -42,6 +30,13 @@ namespace VRTK.Controllables.ArtificialBased
         [Tooltip("The speed in which the pusher will return to the `Target Position` of the pusher.")]
         public float returnSpeed = 10f;
 
+        [SerializeField] private Animator_all _Animation;
+        [SerializeField] private All_PS _Allps;
+        [SerializeField] private string Name;
+
+        private bool ClickProtection = true;
+        private bool CoroutineProtections = true;
+
         protected Coroutine positionLerpRoutine;
         protected Coroutine setTargetPositionRoutine;
         protected float vectorEqualityThreshold = 0.001f;
@@ -53,6 +48,9 @@ namespace VRTK.Controllables.ArtificialBased
         /// The GetValue method returns the current position value of the pusher.
         /// </summary>
         /// <returns>The actual position of the pusher.</returns>
+        /// 
+
+
         public override float GetValue()
         {
             return transform.localPosition[(int)operateAxis];
@@ -158,6 +156,7 @@ namespace VRTK.Controllables.ArtificialBased
                 if (AtMinLimit())
                 {
                     OnMinLimitExited(payload);
+                    Check_name();
                 }
                 if (AtMaxLimit())
                 {
@@ -298,5 +297,42 @@ namespace VRTK.Controllables.ArtificialBased
         {
             positionLerpRoutine = StartCoroutine(PositionLerp(Vector3.Lerp(originalLocalPosition, PressedPosition(), restingPosition), returnSpeed));
         }
+
+        #region Chech_Name and Delay
+        private void Check_name()
+        {
+            if (Name == "Moon" && ClickProtection == true)
+            {
+                ClickProtection = false;
+                _Animation._i = 0;
+                _Animation.One_Pic();
+            }
+            else if (Name == "Earth" && ClickProtection== true)
+            {
+                ClickProtection = false;
+                _Animation._i = 1;
+                _Animation.One_Pic();
+            }
+            else if (Name == "Mars" && ClickProtection == true)
+            {
+                ClickProtection = false;
+                _Animation._i = 2;
+                _Animation.One_Pic();
+            }
+
+            if (CoroutineProtections)
+            {
+                CoroutineProtections = false;
+                StartCoroutine("dElayFor_CliclProtections");
+            }
+        }
+
+        private IEnumerator dElayFor_CliclProtections()
+        {
+            yield return new WaitForSeconds(2f);
+            ClickProtection = true;
+            CoroutineProtections = true;
+        }
+        #endregion
     }
 }
