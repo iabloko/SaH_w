@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace VRTK.Controllables.ArtificialBased
+namespace VRTK
 {
     public class All_PS : MonoBehaviour
     {
@@ -44,21 +44,21 @@ namespace VRTK.Controllables.ArtificialBased
         {
             if (ParticlesSystem[PS_i].m_ParticlesSystem[PS_i].isPlaying)
             {
+                Debug.Log("isPlaying");
                 for (int i = 0; i < ParticlesSystem[PS_i].m_ParticlesSystem.Length; i++)
                 {
                     ParticlesSystem[PS_i].m_ParticlesSystem[i].Stop();
                 }
                 yield return m_delay;
-                _forTriggers.ClickProtection = true;
             }
             else if (ParticlesSystem[PS_i].m_ParticlesSystem[PS_i].isStopped)
             {
+                Debug.Log("isStopped");
                 for (int i = 0; i < ParticlesSystem[PS_i].m_ParticlesSystem.Length; i++)
                 {
                     ParticlesSystem[PS_i].m_ParticlesSystem[i].Play();
                 }
                 yield return m_delay;
-                _forTriggers.ClickProtection = true;
             }
         }
         #endregion

@@ -1038,6 +1038,7 @@ namespace VRTK
 #pragma warning disable 0618
             if (touchHighlightColor != Color.clear && !GetComponent<VRTK_InteractObjectHighlighter>())
             {
+                
                 VRTK_InteractObjectHighlighter autoGenInteractHighlighter = gameObject.AddComponent<VRTK_InteractObjectHighlighter>();
                 autoGenInteractHighlighter.touchHighlight = touchHighlightColor;
                 autoGenInteractHighlighter.objectHighlighter = (objectHighlighter == null ? Highlighters.VRTK_BaseHighlighter.GetActiveHighlighter(gameObject) : objectHighlighter);

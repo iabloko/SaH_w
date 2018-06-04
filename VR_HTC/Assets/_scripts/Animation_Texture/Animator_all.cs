@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VRTK.Controllables.ArtificialBased
+namespace VRTK
 {
     public class Animator_all : MonoBehaviour
     {
@@ -17,7 +17,6 @@ namespace VRTK.Controllables.ArtificialBased
         [SerializeField] private float _delay;
 
         [SerializeField] private Settings m_Settings;
-        [SerializeField] private VRTK_ArtificialPusher _VRTK_ArtificialPusher;
         [Header("Mesh_and_texture")]
         [SerializeField] private List<MeshRenderer> _MeshRender;
 
@@ -80,6 +79,7 @@ namespace VRTK.Controllables.ArtificialBased
         #region Start_OnePick
         private IEnumerator OnePick()
         {
+            Debug.Log("One_Pick" + "     "  + _i);
             //Start_Animation_for _i MeshRender, with _i Texture massive;
             _MeshRender[_i].material.mainTexture = Textures[_i].m_AnimTextures[m_CurrentTextureIndex];
             _MeshRender[_i].material.SetTexture("_EmissionMap", Textures[_i].m_AnimTextures[m_CurrentTextureIndex]);

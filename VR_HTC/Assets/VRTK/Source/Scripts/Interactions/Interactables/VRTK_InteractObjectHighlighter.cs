@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using Highlighters;
+    using System.Collections;
 
     /// <summary>
     /// Event Payload
@@ -47,6 +48,14 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractObjectHighlighter")]
     public class VRTK_InteractObjectHighlighter : VRTK_InteractableListener
     {
+
+        [SerializeField] private Animator_all _Animation;
+        [SerializeField] private All_PS _Allps;
+        [SerializeField] private string Name;
+
+        private bool ClickProtection = true;
+        private bool CoroutineProtections = true;
+
         [Header("Object Interaction Settings")]
 
         [Tooltip("The colour to highlight the object on the near touch interaction.")]
@@ -185,17 +194,8 @@ namespace VRTK
             objectToMonitor = (objectToMonitor != null ? objectToMonitor : GetComponentInParent<VRTK_InteractableObject>());
             if (objectToMonitor != null)
             {
-                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
-                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
-
                 objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
                 objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
-
-                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
-                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
-
-                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
-                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
                 return true;
             }
             else if (throwError)
@@ -209,17 +209,8 @@ namespace VRTK
         {
             if (objectToMonitor != null)
             {
-                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
-                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
-
                 objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
                 objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
-
-                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
-                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
-
-                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
-                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
             }
         }
 
@@ -235,102 +226,16 @@ namespace VRTK
             return e;
         }
 
-        protected virtual void NearTouchHighlightObject(object sender, InteractableObjectEventArgs e)
-        {
-            Highlight(nearTouchHighlight);
-            OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
-        }
-
-        protected virtual void NearTouchUnHighlightObject(object sender, InteractableObjectEventArgs e)
-        {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            if (!interactableObject.IsTouched())
-            {
-                Unhighlight();
-                OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearUntouch, e.interactingObject));
-            }
-        }
 
         protected virtual void TouchHighlightObject(object sender, InteractableObjectEventArgs e)
         {
-            Highlight(touchHighlight);
-            OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Touch, e.interactingObject));
+            Check_name();
+            Debug.Log("ChangeColorTouch");
         }
 
         protected virtual void TouchUnHighlightObject(object sender, InteractableObjectEventArgs e)
         {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            if (interactableObject.IsNearTouched())
-            {
-                Highlight(nearTouchHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
-            }
-            else
-            {
-                Unhighlight();
-                OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Untouch, e.interactingObject));
-            }
-        }
 
-        protected virtual void GrabHighlightObject(object sender, InteractableObjectEventArgs e)
-        {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            if (!interactableObject.IsUsing())
-            {
-                Highlight(grabHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Grab, e.interactingObject));
-            }
-        }
-
-        protected virtual void GrabUnHighlightObject(object sender, InteractableObjectEventArgs e)
-        {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            if (interactableObject.IsTouched())
-            {
-                Highlight(touchHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Touch, e.interactingObject));
-            }
-            else if (interactableObject.IsNearTouched())
-            {
-                Highlight(nearTouchHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
-            }
-            else
-            {
-                Unhighlight();
-                OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Ungrab, e.interactingObject));
-            }
-        }
-
-        protected virtual void UseHighlightObject(object sender, InteractableObjectEventArgs e)
-        {
-            Highlight(useHighlight);
-            OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Use, e.interactingObject));
-        }
-
-        protected virtual void UseUnHighlightObject(object sender, InteractableObjectEventArgs e)
-        {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            if (interactableObject.IsGrabbed())
-            {
-                Highlight(grabHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Grab, e.interactingObject));
-            }
-            else if (interactableObject.IsTouched())
-            {
-                Highlight(touchHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Touch, e.interactingObject));
-            }
-            else if (interactableObject.IsNearTouched())
-            {
-                Highlight(nearTouchHighlight);
-                OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
-            }
-            else
-            {
-                Unhighlight();
-                OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Unuse, e.interactingObject));
-            }
         }
 
         protected virtual void InitialiseHighlighter(Color highlightColor)
@@ -352,5 +257,49 @@ namespace VRTK
         {
             return (objectHighlighter != null ? objectHighlighter : VRTK_BaseHighlighter.GetActiveHighlighter(objectToHighlight));
         }
+
+        #region Chech_Name and Delay
+        private void Check_name()
+        {
+            if (Name == "Moon" && ClickProtection == true)
+            {
+                ClickProtection = false;
+                _Animation._i = 0;
+                _Animation.One_Pic();
+            }
+            else if (Name == "Earth" && ClickProtection == true)
+            {
+                ClickProtection = false;
+                _Animation._i = 1;
+                _Animation.One_Pic();
+            }
+            else if (Name == "Mars" && ClickProtection == true)
+            {
+                ClickProtection = false;
+                _Animation._i = 2;
+                _Animation.One_Pic();
+            }
+            else if (Name == "SandStorm" && ClickProtection == true)
+            {
+                ClickProtection = false;
+                _Allps.PS_i = 0;
+                _Allps.Particles();
+                Debug.Log("Particles");
+            }
+
+            if (CoroutineProtections)
+            {
+                CoroutineProtections = false;
+                StartCoroutine("dElayFor_CliclProtections");
+            }
+        }
+
+        private IEnumerator dElayFor_CliclProtections()
+        {
+            yield return new WaitForSeconds(2f);
+            ClickProtection = true;
+            CoroutineProtections = true;
+        }
+        #endregion
     }
 }

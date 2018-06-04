@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace VRTK.Controllables.ArtificialBased
+namespace VRTK
 {
     public class Settings : MonoBehaviour
     {

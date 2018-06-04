@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace VRTK.Controllables.ArtificialBased
+namespace VRTK
 {
 
     public class MenuAnimator : MonoBehaviour

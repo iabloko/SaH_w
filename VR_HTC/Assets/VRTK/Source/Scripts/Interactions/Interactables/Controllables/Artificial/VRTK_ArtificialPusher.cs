@@ -307,7 +307,7 @@
                 _Animation._i = 0;
                 _Animation.One_Pic();
             }
-            else if (Name == "Earth" && ClickProtection== true)
+            else if (Name == "Earth" && ClickProtection == true)
             {
                 ClickProtection = false;
                 _Animation._i = 1;
